@@ -1,6 +1,10 @@
 {
   "extends": "@todo-list/typescript-config/base.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "outDir": "dist",
     "rootDir": "src"
   },

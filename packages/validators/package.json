@@ -4,12 +4,17 @@
   "type": "module",
   "private": true,
   "exports": {
-    ".": "./src/index"
+    ".": "./src/index.ts",
+    "./user": "./src/user/validation.ts",
+    "./todo": "./src/todo/validation.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
   }
 }
