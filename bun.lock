@@ -61,7 +61,7 @@
       },
     },
     "packages/store": {
-      "name": "store",
+      "name": "@todo-list/store",
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -84,6 +84,15 @@
         "@types/react-dom": "19.2.2",
         "eslint": "^9.39.1",
         "typescript": "5.9.2",
+      },
+    },
+    "packages/utils": {
+      "name": "utils",
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
       },
     },
     "tooling/eslint-config": {
@@ -222,6 +231,8 @@
     "@todo-list/config": ["@todo-list/config@workspace:packages/config"],
 
     "@todo-list/eslint-config": ["@todo-list/eslint-config@workspace:tooling/eslint-config"],
+
+    "@todo-list/store": ["@todo-list/store@workspace:packages/store"],
 
     "@todo-list/typescript-config": ["@todo-list/typescript-config@workspace:tooling/typescript-config"],
 
@@ -705,8 +716,6 @@
 
     "stop-iteration-iterator": ["stop-iteration-iterator@1.1.0", "", { "dependencies": { "es-errors": "^1.3.0", "internal-slot": "^1.1.0" } }, "sha512-eLoXW/DHyl62zxY4SCaIgnRhuMr6ri4juEYARS8E6sCEqzKpOiE521Ucofdx+KnDZl5xmvGYaaKCk5FEOxJCoQ=="],
 
-    "store": ["store@workspace:packages/store"],
-
     "string-argv": ["string-argv@0.3.2", "", {}, "sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q=="],
 
     "string-width": ["string-width@8.2.0", "", { "dependencies": { "get-east-asian-width": "^1.5.0", "strip-ansi": "^7.1.2" } }, "sha512-6hJPQ8N0V0P3SNmP6h2J99RLuzrWz2gvT7VnK5tKvrNqJoyS9W4/Fb8mo31UiPvy00z7DQXkP2hnKBVav76thw=="],
@@ -776,6 +785,8 @@
     "undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
 
     "uri-js": ["uri-js@4.4.1", "", { "dependencies": { "punycode": "^2.1.0" } }, "sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg=="],
+
+    "utils": ["utils@workspace:packages/utils"],
 
     "which": ["which@2.0.2", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "./bin/node-which" } }, "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA=="],
 

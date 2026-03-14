@@ -1,0 +1,15 @@
+{
+  "name": "@todo-list/utils",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
