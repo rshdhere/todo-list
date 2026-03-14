@@ -43,7 +43,16 @@
       },
     },
     "packages/api": {
-      "name": "api",
+      "name": "@todo-list/api",
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
+      },
+    },
+    "packages/config": {
+      "name": "@todo-list/config",
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -199,6 +208,10 @@
 
     "@swc/helpers": ["@swc/helpers@0.5.15", "", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g=="],
 
+    "@todo-list/api": ["@todo-list/api@workspace:packages/api"],
+
+    "@todo-list/config": ["@todo-list/config@workspace:packages/config"],
+
     "@todo-list/eslint-config": ["@todo-list/eslint-config@workspace:tooling/eslint-config"],
 
     "@todo-list/typescript-config": ["@todo-list/typescript-config@workspace:tooling/typescript-config"],
@@ -248,8 +261,6 @@
     "ansi-regex": ["ansi-regex@6.2.2", "", {}, "sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg=="],
 
     "ansi-styles": ["ansi-styles@4.3.0", "", { "dependencies": { "color-convert": "^2.0.1" } }, "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg=="],
-
-    "api": ["api@workspace:packages/api"],
 
     "argparse": ["argparse@2.0.1", "", {}, "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="],
 
