@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "exports": {
-    ".": "./src/index"
+    ".": "./src/index.ts"
   },
   "private": true,
   "devDependencies": {
