@@ -1,12 +1,15 @@
 import { app } from "@todo-list/api";
-import { ENVIRONMENT, SERVER_PORT } from "@todo-list/config";
+import { SERVER_PORT } from "@todo-list/config";
+import { ensureDatabaseConnection, runtimeMode } from "@/src/index";
 
-if (ENVIRONMENT === "production") {
+const startServer = async () => {
+  await ensureDatabaseConnection();
+
   app.listen(SERVER_PORT, () => {
-    console.log(`your server is listening on http://localhost:${SERVER_PORT}`);
+    console.log(
+      `server is running in ${runtimeMode} mode at http://localhost:${SERVER_PORT}`,
+    );
   });
-} else {
-  console.log(
-    "server can only be started in production mode (NODE_ENV=production).",
-  );
-}
+};
+
+startServer();
