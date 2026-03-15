@@ -1,4 +1,4 @@
-import { z } from "@/src/index.js";
+import { z } from "zod";
 
 export const authSchema = {
   input: z

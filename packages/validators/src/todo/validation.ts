@@ -1,4 +1,4 @@
-import { z } from "@/src/index.js";
+import { z } from "zod";
 
 const todoId = z.object({ todoId: z.uuid() }).strict();
 
