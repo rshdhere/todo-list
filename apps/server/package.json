@@ -4,8 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --watch src/bin.ts",
-    "start": "bun run src/bin.ts"
+    "dev": "NODE_ENV=development bun --watch src/bin.ts",
+    "start": "NODE_ENV=production bun run src/bin.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -14,10 +14,13 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@todo-list/config": "workspace:*",
     "@todo-list/api": "workspace:*",
+    "@todo-list/config": "workspace:*",
+    "@todo-list/drizzle": "workspace:*",
     "@trpc/server": "^11.12.0",
     "@types/express": "^5.0.6",
-    "express": "^5.2.1"
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
   }
 }
