@@ -48,9 +48,12 @@
       "dependencies": {
         "@todo-list/api": "workspace:*",
         "@todo-list/config": "workspace:*",
+        "@todo-list/drizzle": "workspace:*",
         "@trpc/server": "^11.12.0",
         "@types/express": "^5.0.6",
+        "drizzle-orm": "^0.45.1",
         "express": "^5.2.1",
+        "pg": "^8.20.0",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -81,6 +84,9 @@
     },
     "packages/config": {
       "name": "@todo-list/config",
+      "dependencies": {
+        "dotenv": "^17.3.1",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -101,15 +107,6 @@
         "@types/pg": "^8.18.0",
         "drizzle-kit": "^0.31.9",
         "tsx": "^4.21.0",
-      },
-      "peerDependencies": {
-        "typescript": "^5",
-      },
-    },
-    "packages/store": {
-      "name": "@todo-list/store",
-      "devDependencies": {
-        "@types/bun": "latest",
       },
       "peerDependencies": {
         "typescript": "^5",
@@ -399,8 +396,6 @@
     "@todo-list/drizzle": ["@todo-list/drizzle@workspace:packages/drizzle"],
 
     "@todo-list/eslint-config": ["@todo-list/eslint-config@workspace:tooling/eslint-config"],
-
-    "@todo-list/store": ["@todo-list/store@workspace:packages/store"],
 
     "@todo-list/typescript-config": ["@todo-list/typescript-config@workspace:tooling/typescript-config"],
 
