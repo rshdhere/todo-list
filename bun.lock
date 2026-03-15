@@ -22,6 +22,7 @@
         "@tanstack/react-query": "^5.90.21",
         "@todo-list/api": "workspace:*",
         "@todo-list/ui": "workspace:*",
+        "@todo-list/utils": "workspace:*",
         "@trpc/client": "^11.12.0",
         "@trpc/server": "^11.12.0",
         "@trpc/tanstack-react-query": "^11.12.0",
@@ -84,9 +85,6 @@
     },
     "packages/config": {
       "name": "@todo-list/config",
-      "dependencies": {
-        "dotenv": "^17.3.1",
-      },
       "devDependencies": {
         "@types/bun": "latest",
       },
