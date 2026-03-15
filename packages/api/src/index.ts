@@ -17,7 +17,6 @@ export const appRouter = router({
 export type AppRouter = typeof appRouter;
 
 export const app = express();
-app.use(express.json());
 
 app.use(
   "/trpc",
