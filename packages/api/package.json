@@ -13,6 +13,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@todo-list/drizzle": "workspace:*",
     "@todo-list/validators": "workspace:*",
     "@todo-list/config": "workspace:*",
     "@trpc/server": "^11.12.0",
