@@ -1,41 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useForm, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSchema, type SignUpSchema } from "@todo-list/validators";
 
 export default function SignUp() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<SignUpSchema>({
+    resolver: zodResolver(authSchema.input),
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: FieldValues) => {
     // TODO: submit to server
     // ....
+
+    reset;
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-y-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-2">
         <input
-          required
+          {...register("email")}
           type="email"
-          value={email}
           maxLength={32}
           placeholder="email"
-          onChange={(e) => setEmail(e.target.value)}
           className="rounded px-4 py-2.5 outline-none selection:bg-emerald-300"
         />
+        {errors.email && (
+          <p className="text-red-500">{`${errors.email.message}`}</p>
+        )}
         <input
-          required
+          {...register("password")}
           type="password"
-          value={password}
           maxLength={24}
-          minLength={8}
-          onChange={(e) => setPassword(e.target.value)}
           placeholder="password"
           className="rounded px-4 py-2.5 outline-none selection:bg-emerald-300"
         />
+        {errors.password && (
+          <p className="text-red-500">{`${errors.password.message}`}</p>
+        )}
         <button
+          disabled={isSubmitting}
           type="submit"
           className="cursor-pointer rounded bg-emerald-400 py-2 text-neutral-900 disabled:bg-gray-300"
         >
