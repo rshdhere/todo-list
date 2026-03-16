@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { JWT_SECRET } from "@todo-list/config";
 import { db, eq } from "@todo-list/drizzle";
 import { authSchema } from "@todo-list/validators";
-import { publicProcedure, router } from "@/src/trpc.js";
+import { publicProcedure, router } from "../../trpc.js";
 import { usersTable } from "@todo-list/drizzle/database";
 
 export const userRouter = router({

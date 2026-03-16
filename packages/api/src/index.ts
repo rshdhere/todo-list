@@ -1,10 +1,11 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { router } from "@/src/trpc.js";
+import cors from "cors";
+import { router } from "./trpc.js";
 import { TRPCError } from "@trpc/server";
-import { JWT_SECRET } from "@todo-list/config";
-import { userRouter } from "@/src/routes/v1/user.js";
-import { todoRouter } from "@/src/routes/v1/todo.js";
+import { CLIENT_URL, JWT_SECRET } from "@todo-list/config";
+import { userRouter } from "./routes/v1/user.js";
+import { todoRouter } from "./routes/v1/todo.js";
 import * as trpcExpress from "@trpc/server/adapters/express";
 
 export const appRouter = router({
@@ -17,6 +18,12 @@ export const appRouter = router({
 export type AppRouter = typeof appRouter;
 
 export const app = express();
+
+app.use(
+  cors({
+    origin: CLIENT_URL,
+  }),
+);
 
 app.use(
   "/trpc",

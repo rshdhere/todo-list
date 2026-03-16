@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { and, db, eq } from "@todo-list/drizzle";
 import { todoSchema } from "@todo-list/validators";
-import { privateProcedure, router } from "@/src/trpc.js";
+import { privateProcedure, router } from "../../trpc.js";
 import { todosTable } from "@todo-list/drizzle/database";
 
 export const todoRouter = router({
