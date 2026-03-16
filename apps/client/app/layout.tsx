@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import TRPCReactProvider from "@/providers/trpc-provider";
 import { ThemesProvider } from "@/providers/theme-provider";
 
+const SERVER_PORT = process.env.SERVER_PORT;
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -23,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className}`}>
-        <TRPCReactProvider>
+        <TRPCReactProvider trpcUrl={`http://localhost:${SERVER_PORT}/trpc`}>
           <ThemesProvider
             attribute="class"
             defaultTheme="system"
