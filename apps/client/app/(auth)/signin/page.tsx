@@ -2,10 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authSchema } from "@todo-list/validators";
+import { authSchema, type SignInSchema } from "@todo-list/validators";
 
 export default function SignIn() {
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit } = useForm<SignInSchema>({
     resolver: zodResolver(authSchema.input),
   });
 
