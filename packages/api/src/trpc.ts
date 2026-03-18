@@ -1,7 +1,9 @@
+import type { Response } from "express";
 import { initTRPC, TRPCError } from "@trpc/server";
 
 export type Context = {
   userId?: string;
+  res: Response;
 };
 
 const t = initTRPC.context<Context>().create();
