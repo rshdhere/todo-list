@@ -1,16 +1,52 @@
+import type { Response } from "express";
 import jwt from "jsonwebtoken";
 import { TRPCError } from "@trpc/server";
-import { JWT_SECRET } from "@todo-list/config";
 import { db, eq } from "@todo-list/drizzle";
 import { authSchema } from "@todo-list/validators";
+import { JWT_SECRET, REFRESH_TOKEN_SECRET } from "@todo-list/config";
 import { publicProcedure, router } from "../../trpc.js";
-import { usersTable } from "@todo-list/drizzle/database";
+import {
+  createRefreshToken,
+  hashRefreshToken,
+  refreshTokenCookieOptions,
+} from "../../auth/refresh-token.js";
+import { refreshTokensTable, usersTable } from "@todo-list/drizzle/database";
+
+async function createSessionTokens(userId: string, res: Response) {
+  if (!JWT_SECRET || !REFRESH_TOKEN_SECRET) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "JWT secret's are not baked in the server",
+    });
+  }
+
+  const { refreshToken, tokenId, expiresAt } = createRefreshToken(
+    userId,
+    REFRESH_TOKEN_SECRET,
+  );
+
+  await db.insert(refreshTokensTable).values({
+    userId,
+    tokenId,
+    tokenHash: hashRefreshToken(refreshToken),
+    expiresAt,
+  });
+
+  res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+
+  const accessToken = jwt.sign({ userId }, JWT_SECRET, {
+    algorithm: "HS256",
+    expiresIn: "15m",
+  });
+
+  return { accessToken };
+}
 
 export const userRouter = router({
   signup: publicProcedure
     .input(authSchema.input)
     .output(authSchema.output)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const users = await db
         .select()
         .from(usersTable)
@@ -40,13 +76,13 @@ export const userRouter = router({
         });
       }
 
-      return { userId: user.userId };
+      return createSessionTokens(user.userId, ctx.res);
     }),
 
   signin: publicProcedure
     .input(authSchema.input)
-    .output(authSchema.signinOutput)
-    .mutation(async ({ input }) => {
+    .output(authSchema.output)
+    .mutation(async ({ input, ctx }) => {
       const [user] = await db
         .select({
           userId: usersTable.id,
@@ -74,17 +110,6 @@ export const userRouter = router({
         });
       }
 
-      if (!JWT_SECRET) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "JWT secret is not configured",
-        });
-      }
-
-      const token = jwt.sign({ userId: user.userId }, JWT_SECRET, {
-        expiresIn: "1hr",
-      });
-
-      return { token };
+      return createSessionTokens(user.userId, ctx.res);
     }),
 });
