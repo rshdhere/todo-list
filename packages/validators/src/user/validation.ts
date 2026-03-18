@@ -20,21 +20,7 @@ export const authSchema = {
 
   output: z
     .object({
-      userId: z.uuid(),
-    })
-    .strict(),
-
-  signinOutput: z
-    .object({
-      token: z.string().min(1),
-    })
-    .strict(),
-};
-
-export const userSchema = {
-  meOutput: z
-    .object({
-      usdBalance: z.number(),
+      accessToken: z.jwt(),
     })
     .strict(),
 };
