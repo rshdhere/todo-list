@@ -1,13 +1,17 @@
 "use client";
 
 import { useTRPC } from "@/utils/trpc";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/auth-provider";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, type SignInSchema } from "@todo-list/validators";
 
 export default function SignIn() {
+  const router = useRouter();
   const trpc = useTRPC();
+  const { setAuthToken } = useAuth();
   const {
     register,
     handleSubmit,
@@ -21,8 +25,10 @@ export default function SignIn() {
 
   const onSubmit = (data: SignInSchema) => {
     signinMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (result) => {
+        setAuthToken(result.accessToken);
         reset();
+        router.replace("/");
       },
     });
   };
@@ -46,6 +52,7 @@ export default function SignIn() {
         <p className="text-red-500">{errors.password.message}</p>
       )}
       <button
+        disabled={signinMutation.isPending}
         type="submit"
         className="cursor-pointer rounded bg-emerald-400 py-2 text-neutral-900 disabled:bg-gray-300"
       >
