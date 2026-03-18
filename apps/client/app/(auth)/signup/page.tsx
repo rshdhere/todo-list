@@ -1,13 +1,18 @@
 "use client";
 
+import { useTRPC } from "@/utils/trpc";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/auth-provider";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, type SignUpSchema } from "@todo-list/validators";
-import { useTRPC } from "@/utils/trpc";
 
 export default function SignUp() {
+  const router = useRouter();
   const trpc = useTRPC();
+
+  const { setAuthToken } = useAuth();
   const {
     register,
     handleSubmit,
@@ -21,8 +26,10 @@ export default function SignUp() {
 
   const onSubmit = (data: SignUpSchema) => {
     signupMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (result) => {
+        setAuthToken(result.accessToken);
         reset();
+        router.replace("/");
       },
     });
   };
