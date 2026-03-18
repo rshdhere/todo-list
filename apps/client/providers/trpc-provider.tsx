@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { TRPCProvider } from "@/utils/trpc";
+import { AuthProvider } from "@/providers/auth-provider";
+import { createAuthFetch } from "@/utils/auth/auth-fetch";
 import type { AppRouter } from "@todo-list/api";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -44,6 +46,7 @@ export default function TRPCReactProvider({
       links: [
         httpBatchLink({
           url: trpcUrl,
+          fetch: createAuthFetch(trpcUrl),
         }),
       ],
     }),
@@ -52,7 +55,7 @@ export default function TRPCReactProvider({
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        {children}
+        <AuthProvider trpcUrl={trpcUrl}>{children}</AuthProvider>
       </TRPCProvider>
     </QueryClientProvider>
   );
