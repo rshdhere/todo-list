@@ -1,3 +1,5 @@
+export const RESEND_API_KEY = Bun.env.RESEND_API_KEY;
+export const FROM_ADDRESS = Bun.env.FROM_ADDRESS;
 export const REFRESH_TOKEN_SECRET = Bun.env.REFRESH_TOKEN_SECRET;
 export const JWT_SECRET = Bun.env.JWT_SECRET;
 export const SERVER_PORT = Bun.env.SERVER_PORT;
