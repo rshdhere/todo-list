@@ -10,7 +10,30 @@ import {
   hashRefreshToken,
   refreshTokenCookieOptions,
 } from "../../auth/refresh-token.js";
+import { sendVerificationEmail } from "../../email/verification.js";
 import { refreshTokensTable, usersTable } from "@todo-list/drizzle/database";
+
+const MAX_VERIFICATION_EMAIL_RESENDS = 1;
+const verificationResendAttemptsByEmail = new Map<string, number>();
+
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
+function consumeVerificationResendAttempt(email: string) {
+  const normalizedEmail = normalizeEmail(email);
+  const currentCount =
+    verificationResendAttemptsByEmail.get(normalizedEmail) ?? 0;
+
+  if (currentCount >= MAX_VERIFICATION_EMAIL_RESENDS) {
+    throw new TRPCError({
+      code: "TOO_MANY_REQUESTS",
+      message: "verification email can be resent only once",
+    });
+  }
+
+  verificationResendAttemptsByEmail.set(normalizedEmail, currentCount + 1);
+}
 
 async function createSessionTokens(userId: string, res: Response) {
   if (!JWT_SECRET || !REFRESH_TOKEN_SECRET) {
@@ -45,14 +68,29 @@ async function createSessionTokens(userId: string, res: Response) {
 export const userRouter = router({
   signup: publicProcedure
     .input(authSchema.input)
-    .output(authSchema.output)
-    .mutation(async ({ input, ctx }) => {
+    .output(authSchema.signupOutput)
+    .mutation(async ({ input }) => {
       const users = await db
         .select()
         .from(usersTable)
         .where(eq(usersTable.email, input.email));
 
       if (users.length > 0) {
+        const existingUser = users[0];
+
+        if (!existingUser) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "failed to load user",
+          });
+        }
+
+        if (!existingUser.isEmailVerified) {
+          consumeVerificationResendAttempt(input.email);
+          await sendVerificationEmail(existingUser.id, input.email);
+          return { message: "verification email sent" };
+        }
+
         throw new TRPCError({
           code: "CONFLICT",
           message: "user already exists",
@@ -76,7 +114,31 @@ export const userRouter = router({
         });
       }
 
-      return createSessionTokens(user.userId, ctx.res);
+      await sendVerificationEmail(user.userId, input.email);
+      return { message: "verification email sent" };
+    }),
+
+  resendVerificationEmail: publicProcedure
+    .input(authSchema.resendVerificationInput)
+    .output(authSchema.signupOutput)
+    .mutation(async ({ input }) => {
+      const [user] = await db
+        .select({
+          userId: usersTable.id,
+          isEmailVerified: usersTable.isEmailVerified,
+        })
+        .from(usersTable)
+        .where(eq(usersTable.email, input.email));
+
+      if (!user || user.isEmailVerified) {
+        return {
+          message: "if the account exists, a verification email was sent",
+        };
+      }
+
+      consumeVerificationResendAttempt(input.email);
+      await sendVerificationEmail(user.userId, input.email);
+      return { message: "verification email sent" };
     }),
 
   signin: publicProcedure
@@ -87,6 +149,7 @@ export const userRouter = router({
         .select({
           userId: usersTable.id,
           password: usersTable.password,
+          isEmailVerified: usersTable.isEmailVerified,
         })
         .from(usersTable)
         .where(eq(usersTable.email, input.email));
@@ -107,6 +170,13 @@ export const userRouter = router({
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "invalid credentials",
+        });
+      }
+
+      if (!user.isEmailVerified) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "email is not verified",
         });
       }
 
