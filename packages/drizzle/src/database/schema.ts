@@ -12,6 +12,7 @@ export const usersTable = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
+  isEmailVerified: boolean("is_email_verified").notNull().default(false),
 });
 
 export const refreshTokensTable = pgTable(
