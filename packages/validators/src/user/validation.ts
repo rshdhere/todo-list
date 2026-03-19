@@ -18,9 +18,21 @@ export const authSchema = {
     })
     .strict(),
 
+  resendVerificationInput: z
+    .object({
+      email: z.email({ message: "invalid email for verification procedure" }),
+    })
+    .strict(),
+
   output: z
     .object({
       accessToken: z.jwt(),
+    })
+    .strict(),
+
+  signupOutput: z
+    .object({
+      message: z.string(),
     })
     .strict(),
 };
