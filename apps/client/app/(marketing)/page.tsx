@@ -30,6 +30,14 @@ export default function Home() {
     );
   }
 
+  if (isLoggingOut) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-neutral-900 dark:text-neutral-300">
+        <FastLoader content="Logging out..." />
+      </div>
+    );
+  }
+
   return (
     <div className="text-neutral-900 dark:text-neutral-300">
       <ModelTheme />
@@ -41,7 +49,7 @@ export default function Home() {
             disabled={isLoggingOut}
             className="inline-flex cursor-pointer items-center underline disabled:cursor-not-allowed"
           >
-            {isLoggingOut ? <FastLoader content="Logging out..." /> : "Logout"}
+            Logout
           </button>
         ) : (
           <>
